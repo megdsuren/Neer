@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Эрдэнэ Нутаг – Phase 3.1</title> 
+
+<style>
+:root{
+  --bg:#050913;
+  --glass:rgba(255,255,255,.09);
+  --line:rgba(255,255,255,.15);
+  --accent:#4fd1ff;
+  --accent2:#ffd166;
+  --ok:#7CFFB2;
+}
+*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,-apple-system}
+body{
+  background:
+    radial-gradient(circle at 15% 0%,#123b6b,#050913 45%),
+    radial-gradient(circle at bottom right,#0b3a2e,#050913 40%);
+  color:#fff;height:100vh;overflow:hidden;
+} 
+
+/* ===== HEADER ===== */
+header{
+  position:fixed;top:0;width:100%;
+  padding:1rem 1.2rem;
+  display:flex;justify-content:space-between;align-items:center;
+  background:rgba(5,9,19,.72);
+  backdrop-filter:blur(18px);
+  z-index:10;
+}
+header h1{font-size:.95rem;letter-spacing:.25em;opacity:.9}
+header button{
+  background:var(--glass);
+  border:1px solid var(--line);
+  color:#fff;padding:.35rem .9rem;border-radius:999px;
+  transition:.25s;
+}
+header button:active{transform:scale(.95)} 
+
+/* ===== MAIN ===== */
+main{
+  position:absolute;top:64px;bottom:82px;width:100%;
+  overflow-y:auto;padding:1rem;
+}
+section{display:none}
+section.active{display:block;animation:in .35s cubic-bezier(.2,.8,.2,1)}
+@keyframes in{from{opacity:0;transform:translateY(14px)}to{opacity:1}} 
+
+/* ===== CARD ===== */
+.card{
+  background:linear-gradient(145deg,rgba(255,255,255,.11),rgba(255,255,255,.03));
+  border:1px solid var(--line);
+  border-radius:26px;
+  padding:1.2rem;margin-bottom:1.1rem;
+  transition:.35s;
+}
+.card:active{transform:scale(.985)}
+.card h2{font-size:1.05rem;margin-bottom:.35rem}
+.card p{font-size:.92rem;line-height:1.45;opacity:.86}
+.small{font-size:.75rem;opacity:.7} 
+
+/* ===== BADGE ===== */
+.badge{
+  display:inline-block;padding:.2rem .6rem;border-radius:999px;
+  font-size:.65rem;margin-bottom:.4rem;
+}
+.sponsored{background:var(--accent2);color:#000}
+.user{background:rgba(79,209,255,.18);color:var(--accent)}
+.ad{background:rgba(255,120,120,.22);color:#ff9a9a} 
+
+/* ===== FEED IMG ===== */
+.feed-img{
+  width:100%;border-radius:18px;margin-top:.7rem;
+  transition:.35s;
+}
+.feed-img:active{transform:scale(.98)} 
+
+/* ===== FORM ===== */
+form{display:flex;flex-direction:column;gap:.6rem}
+input,textarea,select{
+  background:var(--glass);border:1px solid var(--line);
+  border-radius:16px;padding:.6rem .8rem;color:#fff;
+}
+textarea{resize:none;min-height:80px}
+form button{
+  background:var(--accent);border:none;color:#000;
+  padding:.7rem;border-radius:999px;font-weight:700;
+  transition:.25s;
+}
+form button:active{transform:scale(.96)} 
+
+/* ===== MAP ===== */
+.map{
+  height:190px;border-radius:24px;
+  background:
+    radial-gradient(circle at center,#4fd1ff55,#0000 60%),
+    linear-gradient(180deg,#0c1f3d,#050913);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.85rem;opacity:.9;
+  position:relative;overflow:hidden;
+}
+.pin{
+  position:absolute;width:12px;height:12px;border-radius:50%;
+  background:var(--accent);box-shadow:0 0 12px var(--accent);
+  animation:pulse 1.8s infinite;
+}
+@keyframes pulse{
+  0%{transform:scale(1);opacity:1}
+  100%{transform:scale(2);opacity:0}
+} 
+
+/* ===== TOAST ===== */
+.toast{
+  position:fixed;bottom:100px;left:50%;
+  transform:translateX(-50%) translateY(20px);
+  background:rgba(20,40,70,.95);
+  border:1px solid var(--line);
+  padding:.6rem 1rem;border-radius:999px;
+  opacity:0;pointer-events:none;
+  transition:.35s;z-index:20;
+}
+.toast.show{opacity:1;transform:translateX(-50%)} 
+
+/* ===== NAV ===== */
+nav{
+  position:fixed;bottom:0;width:100%;height:82px;
+  background:rgba(5,9,19,.88);
+  backdrop-filter:blur(18px);
+  border-top:1px solid var(--line);
+  display:flex;justify-content:space-around;align-items:center;
+}
+nav button{
+  background:none;border:none;color:#aaa;
+  display:flex;flex-direction:column;align-items:center;
+  gap:5px;font-size:.7rem;transition:.25s;
+}
+nav button span{font-size:1.45rem}
+nav button.active{color:var(--accent)}
+nav button:active{transform:translateY(-2px) scale(.95)}
+</style>
+</head> 
+
+<body> 
+
+<header>
+  <h1>ЭРДЭНЭ НУТАГ</h1>
+  <button onclick="goHome()">Нүүр</button>
+</header> 
+
+<main> 
+
+<!-- HOME -->
+<section id="home" class="active">
+  <div class="card">
+    <h2>Амьд Монгол</h2>
+    <p>Аялал · Нутаг · Зар · Хүмүүс</p>
+  </div>
+  <div class="card">
+    <p class="small" id="gps">📍 Байршил тодорхойлж байна…</p>
+    <p class="small">🌤️ Цаг агаар: demo</p>
+  </div>
+  <div class="card map">
+    🗺️ Амьд газрын зураг
+    <div class="pin"></div>
+  </div>
+</section> 
+
+<!-- FEED -->
+<section id="feed">
+  <div class="card">
+    <span class="badge sponsored">Sponsored</span>
+    <h2>Хоргын тогоо</h2>
+    <p>Архангайн гайхамшиг.</p>
+    <img class="feed-img" src="https://picsum.photos/600/400?random=21">
+  </div>
+  <div class="card">
+    <span class="badge user">User</span>
+    <h2>Тэрэлжид</h2>
+    <p>Найзуудтайгаа.</p>
+    <img class="feed-img" src="https://picsum.photos/600/400?random=22">
+  </div>
+  <div class="card">
+    <span class="badge ad">Зар</span>
+    <h2>Морин аялал</h2>
+    <p>2 өдөр · guide-тэй</p>
+  </div>
+</section> 
+
+<!-- ADD -->
+<section id="add">
+  <div class="card">
+    <h2>➕ Нэмэх</h2>
+    <form onsubmit="addPost(event)">
+      <input placeholder="Гарчиг" required>
+      <select>
+        <option>Энгийн аялал</option>
+        <option>Sponsored аялал</option>
+        <option>Зар / Үйлчилгээ</option>
+      </select>
+      <textarea placeholder="Тайлбар"></textarea>
+      <input type="file" id="image" accept="image/*">
+      <img id="preview" class="feed-img" style="display:none">
+      <button>Нэмэх</button>
+    </form>
+  </div>
+</section> 
+
+<!-- NUTAG -->
+<section id="nutag">
+  <div class="card">
+    <h2>Аймаг · Сум</h2>
+    <p>Нутаг бүрийн өнгө, түүх.</p>
+  </div>
+</section> 
+
+<!-- PROFILE -->
+<section id="profile">
+  <div class="card">
+    <h2>Миний орон зай</h2>
+    <p>Миний аялал · Миний зар</p>
+  </div>
+</section> 
+
+</main> 
+
+<div class="toast" id="toast">Амжилттай 👍</div> 
+
+<nav>
+  <button class="active" onclick="tab('home',this)"><span>🏠</span>Нүүр</button>
+  <button onclick="tab('feed',this)"><span>🧭</span>Feed</button>
+  <button onclick="tab('add',this)"><span>➕</span>Нэмэх</button>
+  <button onclick="tab('nutag',this)"><span>🗺️</span>Нутгууд</button>
+  <button onclick="tab('profile',this)"><span>👤</span>Миний</button>
+</nav> 
+
+<script>
+function tab(id,el){
+  document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));
+  el.classList.add("active");
+}
+function goHome(){window.location.href="index.html"} 
+
+navigator.geolocation?.getCurrentPosition(p=>{
+  gps.innerText=`📍 ${p.coords.latitude.toFixed(2)}, ${p.coords.longitude.toFixed(2)}`
+}) 
+
+image.onchange=()=>{
+  const f=image.files[0];
+  if(!f)return;
+  preview.src=URL.createObjectURL(f);
+  preview.style.display="block";
+} 
+
+function toast(msg){
+  const t=document.getElementById("toast");
+  t.textContent=msg;
+  t.classList.add("show");
+  setTimeout(()=>t.classList.remove("show"),1800);
+} 
+
+function addPost(e){
+  e.preventDefault();
+  toast("Нэмэгдлээ ✓");
+  e.target.reset();
+  preview.style.display="none";
+}
+</script> 
+
+</body>
+</html>
